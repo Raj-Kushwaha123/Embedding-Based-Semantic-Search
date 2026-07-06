@@ -1,0 +1,32 @@
+# python files
+__pycache__/
+*.pyc
+*.pyo
+
+# virtual environment
+venv/
+.venv/
+
+# environment variables
+.env
+
+# vectorstore (generated at runtime)
+vectorstore/
+
+# user uploaded documents
+data/*
+!data/samples/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# streamlit secrets
+.streamlit/secrets.toml
+
+# testing
+.pytest_cache/
