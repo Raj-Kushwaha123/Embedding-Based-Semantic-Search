@@ -1,0 +1,145 @@
+================================================================================
+                        NOVATECH SOLUTIONS — EMPLOYEE HANDBOOK
+                                  Revised: January 2026
+================================================================================
+
+ABOUT THE COMPANY
+-----------------
+NovaTech Solutions is a technology company headquartered in Bangalore, India,
+with satellite offices in Hyderabad, Pune, and Guwahati. Founded in 2018, we
+specialize in enterprise AI solutions, cloud-native software development, and
+data analytics platforms. Our mission is to democratize cutting-edge technology
+for businesses of every size. As of January 2026, NovaTech employs over 850
+professionals across engineering, product, design, sales, and operations.
+
+Our core values:
+  1. Innovation First — we encourage experimentation and creative problem-solving.
+  2. Customer Obsession — every product decision is driven by customer impact.
+  3. Transparency — open communication at every level of the organization.
+  4. Continuous Learning — we invest in our people through upskilling programs.
+
+
+LEAVE POLICY
+------------
+All full-time employees are entitled to the following paid leave per calendar
+year (January 1 – December 31). Leave balances do not carry over unless
+explicitly approved by the HR department.
+
+  • Sick Leave: 12 days per year. A medical certificate is required for absences
+    exceeding 3 consecutive working days. Unused sick leave is not encashable.
+  • Casual Leave: 15 days per year. Casual leave cannot be taken for more than
+    3 consecutive days without prior manager approval.
+  • Earned / Privilege Leave: 18 days per year, accrued at 1.5 days per month.
+    Earned leave can be carried forward up to a maximum of 30 days. Excess leave
+    will be encashed at the end of the fiscal year at the basic salary rate.
+  • Maternity Leave: 26 weeks of paid leave for female employees, in accordance
+    with the Maternity Benefit Act, 2017.
+  • Paternity Leave: 10 working days of paid leave, to be availed within 3
+    months of the child's birth or adoption.
+  • Bereavement Leave: 5 days of paid leave in the event of the death of an
+    immediate family member (spouse, parent, child, or sibling).
+  • Public Holidays: 12 gazetted holidays per year as announced by the company.
+
+
+WORK FROM HOME POLICY
+---------------------
+NovaTech follows a hybrid work model. Employees may work remotely up to 3 days
+per week, subject to team-level agreements and manager approval. The following
+guidelines apply:
+
+  • Employees must be available during core hours: 10:00 AM – 4:00 PM IST.
+  • A stable internet connection (minimum 20 Mbps) is required.
+  • All remote work must be performed from within India unless international
+    remote work is pre-approved by HR and Legal.
+  • Employees working from home must use the company-provided VPN for accessing
+    internal systems and must adhere to IT security policies at all times.
+  • Team leads may designate mandatory in-office days for collaboration, sprint
+    planning, or client meetings.
+  • Employees who prefer fully remote arrangements may apply through the HR
+    portal; these are evaluated on a case-by-case basis.
+
+
+PERFORMANCE REVIEW PROCESS
+--------------------------
+NovaTech conducts performance reviews on a biannual cycle (April and October).
+
+  1. Self-Assessment: Employees complete a self-assessment form covering goals
+     achieved, challenges faced, and areas of growth.
+  2. Peer Feedback: At least two peer reviews are collected through the internal
+     360-degree feedback tool.
+  3. Manager Review: The reporting manager evaluates the employee on a 5-point
+     scale across key competencies: Technical Excellence, Collaboration,
+     Ownership, Communication, and Innovation.
+  4. Calibration: Department heads participate in a calibration meeting to
+     ensure consistency and fairness across teams.
+  5. Feedback Meeting: The manager conducts a one-on-one feedback session to
+     discuss ratings, growth areas, and career development plans.
+
+Performance ratings:
+  5 — Exceptional: Consistently exceeds expectations; strong leadership impact.
+  4 — Exceeds Expectations: Frequently delivers above the expected level.
+  3 — Meets Expectations: Reliably meets role requirements.
+  2 — Needs Improvement: Performance gaps identified; improvement plan created.
+  1 — Unsatisfactory: Significant underperformance; formal PIP initiated.
+
+Annual increments and bonuses are directly tied to performance ratings.
+
+
+EMPLOYEE BENEFITS
+-----------------
+  • Health Insurance: Group mediclaim policy covering the employee, spouse, and
+    up to two dependent children. Sum insured: ₹5,00,000 per year. Dental and
+    vision coverage is included in the base plan.
+  • Gym & Wellness: Monthly reimbursement of up to ₹2,500 for gym memberships,
+    yoga classes, or any wellness program. Annual health checkup provided free.
+  • Learning Budget: ₹50,000 per year for courses, certifications, conferences,
+    and books related to professional development.
+  • Meal Allowance: ₹3,000 per month as a tax-exempt meal card benefit loaded
+    onto the Sodexo card.
+  • Relocation Assistance: Up to ₹1,50,000 one-time reimbursement for employees
+    relocating to a new city for a NovaTech role.
+  • Employee Stock Options (ESOPs): Eligible after 2 years of service; vesting
+    over a 4-year period with a 1-year cliff.
+  • Retirement Benefits: Provident Fund (PF) contribution at 12% of basic salary
+    matched by the company. Gratuity as per the Payment of Gratuity Act, 1972.
+
+
+CODE OF CONDUCT
+---------------
+All employees are expected to uphold the highest standards of professional
+behavior:
+
+  • Treat every colleague, client, and partner with respect and dignity.
+  • Harassment, discrimination, or bullying of any form will result in
+    disciplinary action up to and including termination.
+  • Conflicts of interest must be disclosed to the Ethics Committee promptly.
+  • Company property, including laptops, software licenses, and data, must be
+    used solely for authorized business purposes.
+  • Employees must not engage in any activity that could damage the company's
+    reputation or violate applicable laws and regulations.
+  • Gifts or hospitality from vendors exceeding ₹5,000 in value must be
+    reported to the Compliance team.
+
+
+IT SECURITY GUIDELINES
+----------------------
+Protecting company and customer data is everyone's responsibility.
+
+  • Passwords must be at least 12 characters long, include uppercase, lowercase,
+    numbers, and special characters. Passwords must be changed every 90 days.
+  • Multi-factor authentication (MFA) is mandatory for all internal systems
+    including email, VPN, GitHub, and cloud consoles.
+  • Never share your credentials with anyone, including IT support staff.
+  • All company laptops must have full-disk encryption enabled and the approved
+    endpoint protection software installed.
+  • Sensitive data (PII, financial records, source code) must not be stored on
+    personal devices or shared via unapproved channels (e.g., personal email,
+    WhatsApp, or public cloud storage).
+  • Report any suspected security incident or phishing attempt immediately to
+    security@novatech.com or via the #security-incidents Slack channel.
+  • USB drives and external storage devices are disabled on company machines by
+    default. Exceptions require written approval from the CISO.
+
+================================================================================
+                   © 2026 NovaTech Solutions Pvt. Ltd. — All Rights Reserved
+================================================================================
