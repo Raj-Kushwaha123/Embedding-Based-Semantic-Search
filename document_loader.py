@@ -27,6 +27,9 @@ class DocumentLoader:
 
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"File not found: {file_path}")
+            
+        if os.path.getsize(file_path) == 0:
+            raise ValueError(f"File is completely empty: {os.path.basename(file_path)}")
 
         ext = os.path.splitext(file_path)[1].lower()
 
@@ -82,9 +85,13 @@ class DocumentLoader:
         # save uploaded file to a temp location so loaders can read it
         tmp_path = None
         try:
+            file_bytes = uploaded_file.read()
+            if not file_bytes:
+                raise ValueError(f"Uploaded file '{file_name}' is completely empty.")
+                
             fd, tmp_path = tempfile.mkstemp(suffix=ext)
             with os.fdopen(fd, "wb") as f:
-                f.write(uploaded_file.read())
+                f.write(file_bytes)
 
             chunks = self.load_document(tmp_path)
 

@@ -37,13 +37,19 @@ class EmbeddingManager:
     def encode_text(self, text):
         """Convert a single text string into a vector (list of numbers)."""
 
-        if not text or not text.strip():
-            # return zero vector for empty input
+        if not text or not str(text).strip():
+            # Handle empty or invalid input safely
             return [0.0] * EMBEDDING_DIMENSION
 
         model = self._load_st_model()
-        vector = model.encode(text, show_progress_bar=False)
-        return vector.tolist()
+        vector = model.encode(str(text), show_progress_bar=False)
+        vector_list = vector.tolist()
+        
+        # Dimension Validation Check
+        if len(vector_list) != EMBEDDING_DIMENSION:
+            raise ValueError(f"Embedding dimension mismatch! Expected {EMBEDDING_DIMENSION}, got {len(vector_list)}")
+            
+        return vector_list
 
     def encode_batch(self, texts):
         """Convert multiple text strings into vectors at once."""
@@ -51,9 +57,19 @@ class EmbeddingManager:
         if not texts:
             return []
 
+        # Filter out completely empty texts
+        valid_texts = [str(t) if t else "" for t in texts]
+
         model = self._load_st_model()
-        vectors = model.encode(texts, show_progress_bar=False, batch_size=32)
-        return [vec.tolist() for vec in vectors]
+        vectors = model.encode(valid_texts, show_progress_bar=False, batch_size=32)
+        vectors_list = [vec.tolist() for vec in vectors]
+        
+        # Dimension Validation Check
+        for i, vec in enumerate(vectors_list):
+            if len(vec) != EMBEDDING_DIMENSION:
+                raise ValueError(f"Batch embedding dimension mismatch at index {i}! Expected {EMBEDDING_DIMENSION}, got {len(vec)}")
+                
+        return vectors_list
 
     def get_model_info(self):
         """Return basic info about the embedding model."""
