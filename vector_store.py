@@ -6,6 +6,11 @@ from config import TOP_K, VECTORSTORE_DIR
 from embedding_manager import EmbeddingManager
 
 
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
 class VectorStoreManager:
     """Manages the FAISS vector store for storing and searching embeddings."""
 
@@ -17,11 +22,12 @@ class VectorStoreManager:
         """Create a new FAISS index from a list of document chunks."""
 
         if not documents:
+            logger.error("Attempted to create vector store from empty document list")
             raise ValueError("Cannot create vector store from empty document list")
 
-        print(f"Creating FAISS index from {len(documents)} chunks...")
+        logger.info(f"Creating FAISS index from {len(documents)} chunks...")
         vectorstore = FAISS.from_documents(documents, self.embeddings)
-        print("FAISS index created!")
+        logger.info("FAISS index created successfully!")
 
         return vectorstore
 
@@ -29,12 +35,12 @@ class VectorStoreManager:
         """Add more documents to an existing FAISS index."""
 
         if not documents:
-            print("No documents to add")
+            logger.warning("No documents provided to add_documents method")
             return vectorstore
 
-        print(f"Adding {len(documents)} chunks to index...")
+        logger.info(f"Adding {len(documents)} chunks to index...")
         vectorstore.add_documents(documents)
-        print("Documents added!")
+        logger.info("Documents added successfully!")
 
         return vectorstore
 
@@ -42,9 +48,13 @@ class VectorStoreManager:
         """Save the FAISS index to disk so we can load it later."""
 
         save_dir = path or VECTORSTORE_DIR
-        os.makedirs(save_dir, exist_ok=True)
-        vectorstore.save_local(save_dir)
-        print(f"Index saved to {save_dir}")
+        try:
+            os.makedirs(save_dir, exist_ok=True)
+            vectorstore.save_local(save_dir)
+            logger.info(f"Index successfully saved to {save_dir}")
+        except Exception as e:
+            logger.error(f"Failed to save index to {save_dir}: {str(e)}")
+            raise
 
     def load(self, path=None):
         """Load a previously saved FAISS index from disk."""
@@ -53,16 +63,21 @@ class VectorStoreManager:
         index_file = os.path.join(load_dir, "index.faiss")
 
         if not os.path.isfile(index_file):
-            print(f"No saved index found at {load_dir}")
+            logger.info(f"No saved index found at {load_dir}")
             return None
 
-        print(f"Loading index from {load_dir}...")
-        vectorstore = FAISS.load_local(
-            load_dir,
-            self.embeddings,
-            allow_dangerous_deserialization=True,
-        )
-        print("Index loaded!")
+        logger.info(f"Loading index from {load_dir}...")
+        try:
+            vectorstore = FAISS.load_local(
+                load_dir,
+                self.embeddings,
+                allow_dangerous_deserialization=True,
+            )
+            logger.info("Index loaded successfully!")
+            return vectorstore
+        except Exception as e:
+            logger.error(f"Error loading FAISS index from {load_dir}: {str(e)}")
+            return None
         return vectorstore
 
     def search(self, vectorstore, query, k=None):

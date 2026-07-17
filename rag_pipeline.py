@@ -3,6 +3,10 @@ from document_loader import DocumentLoader
 from embedding_manager import EmbeddingManager
 from vector_store import VectorStoreManager
 from config import VECTORSTORE_DIR
+import logging
+
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 
 class RAGPipeline:
@@ -33,8 +37,10 @@ class RAGPipeline:
             return {"num_chunks": 0, "num_documents": len(uploaded_files)}
 
         if self.vectorstore is None:
+            logger.info("Initializing new vector store with uploaded files")
             self.vectorstore = self.vs_manager.create_from_documents(all_chunks)
         else:
+            logger.info("Adding uploaded files to existing vector store")
             self.vectorstore = self.vs_manager.add_documents(self.vectorstore, all_chunks)
             
         # Save after modifying
@@ -63,8 +69,10 @@ class RAGPipeline:
     def search(self, query, k=5):
         """Search the vector store and return formatted results."""
         if self.vectorstore is None:
+            logger.warning(f"Search attempted for query '{query}' but no index is loaded")
             return []
 
+        logger.info(f"Executing search for query: '{query}' (top_k={k})")
         raw_results = self.vs_manager.search(self.vectorstore, query, k=k)
         
         formatted_results = []
@@ -104,6 +112,7 @@ class RAGPipeline:
 
     def clear_index(self):
         """Clear the vector store."""
+        logger.info("Clearing the vector store index and deleting physical files")
         self.vectorstore = None
         self.total_docs_indexed = 0
         
