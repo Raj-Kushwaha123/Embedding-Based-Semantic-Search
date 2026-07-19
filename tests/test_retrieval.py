@@ -183,6 +183,73 @@ class TestRAGPipeline:
             "Top result should mention 'quantum'"
         )
 
+    def test_pipeline_multi_file_ingestion(self, tmp_dir):
+        """Ingest multiple files and verify all content is searchable."""
+        # Create two different topic files
+        with open(os.path.join(tmp_dir, "ai_doc.txt"), "w", encoding="utf-8") as f:
+            f.write(
+                "Artificial intelligence and machine learning are reshaping industries. "
+                "Neural networks can classify images, translate languages, and generate text. "
+                "Transfer learning allows pre-trained models to be fine-tuned on new tasks."
+            )
+        with open(os.path.join(tmp_dir, "cooking_doc.txt"), "w", encoding="utf-8") as f:
+            f.write(
+                "The art of French cooking involves precise techniques like julienne cuts, "
+                "making roux, and creating emulsions. Classic dishes include coq au vin, "
+                "bouillabaisse, and ratatouille. Fresh herbs are essential to Provencal cuisine."
+            )
+
+        pipeline = RAGPipeline()
+        total = pipeline.ingest_directory(tmp_dir)
+
+        assert total > 0, "Should ingest chunks from both files"
+
+        # Search for AI content — top result should be from ai_doc
+        ai_results = pipeline.search("neural network image classification", k=1)
+        assert len(ai_results) > 0
+        assert "neural" in ai_results[0]["content"].lower() or "machine" in ai_results[0]["content"].lower()
+
+        # Search for cooking content — top result should be from cooking_doc
+        cook_results = pipeline.search("French cuisine ratatouille recipe", k=1)
+        assert len(cook_results) > 0
+        assert "french" in cook_results[0]["content"].lower() or "cooking" in cook_results[0]["content"].lower()
+
+    def test_pipeline_clear_and_search(self, tmp_dir):
+        """After clearing the index, search should return empty results."""
+        filepath = os.path.join(tmp_dir, "cleartest.txt")
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write("Blockchain is a distributed ledger technology used in cryptocurrency.")
+
+        pipeline = RAGPipeline()
+        pipeline.ingest_directory(tmp_dir)
+
+        # Verify search works before clearing
+        results = pipeline.search("blockchain", k=1)
+        assert len(results) > 0, "Should find results before clearing"
+
+        # Clear and verify search returns empty
+        pipeline.clear_index()
+        results = pipeline.search("blockchain", k=1)
+        assert len(results) == 0, "Should return no results after clearing"
+
+    def test_pipeline_result_format(self, tmp_dir):
+        """Verify the search results have the expected dictionary keys."""
+        filepath = os.path.join(tmp_dir, "format_test.txt")
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write("Python is a popular programming language for data science and web development.")
+
+        pipeline = RAGPipeline()
+        pipeline.ingest_directory(tmp_dir)
+        results = pipeline.search("Python programming", k=1)
+
+        assert len(results) > 0
+        result = results[0]
+        assert "content" in result, "Result must have 'content' key"
+        assert "source" in result, "Result must have 'source' key"
+        assert "page" in result, "Result must have 'page' key"
+        assert "score" in result, "Result must have 'score' key"
+        assert 0.0 <= result["score"] <= 1.0, "Score should be between 0 and 1"
+
 
 # ---------------------------------------------------------------------------
 # Utility Function Tests
