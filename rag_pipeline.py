@@ -77,9 +77,11 @@ class RAGPipeline:
         
         formatted_results = []
         for doc, score in raw_results:
-            # Convert FAISS L2 distance to a pseudo-similarity score (0 to 1)
-            # Smaller distance is better. This is a simple inversion.
-            sim_score = 1.0 / (1.0 + float(score))
+            # For normalized embeddings, FAISS L2 distance squared is related to cosine similarity:
+            # L2_sq = 2 - 2 * cosine_sim => cosine_sim = 1 - (L2_sq / 2)
+            # This gives a proper score between -1 and 1. We'll clip it to 0-1 for UI display.
+            cosine_sim = 1.0 - (float(score) / 2.0)
+            normalized_score = max(0.0, min(1.0, cosine_sim))
             
             source = doc.metadata.get("source", "Unknown")
             # PyPDFLoader usually puts page in metadata
@@ -89,7 +91,7 @@ class RAGPipeline:
                 "content": doc.page_content,
                 "source": os.path.basename(source),
                 "page": page,
-                "score": sim_score
+                "score": normalized_score
             })
             
         return formatted_results
