@@ -468,14 +468,20 @@ with search_col_m:
 if search_clicked and query.strip():
     if not stats.get("index_loaded", False):
         st.warning("⚠️ No index loaded. Upload and process documents first.")
+    elif len(query.strip()) < 2:
+        st.warning("⚠️ Query too short. Please type at least 2 characters.")
     else:
         try:
             with st.spinner("Searching across your knowledge base…"):
                 results = pipeline.search(query.strip(), k=top_k)
             st.session_state.search_results = results
+            if not results:
+                st.info("🔍 No relevant results found. Try rephrasing your query.")
         except Exception as exc:
             st.error(f"Search failed: {exc}")
             st.session_state.search_results = []
+elif search_clicked:
+    st.warning("⚠️ Please enter a search query.")
 
 # ──────────────────────────────────────────────
 # Results

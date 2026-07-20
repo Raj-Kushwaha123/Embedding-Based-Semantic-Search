@@ -4,6 +4,7 @@ from embedding_manager import EmbeddingManager
 from vector_store import VectorStoreManager
 from config import VECTORSTORE_DIR
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -52,28 +53,71 @@ class RAGPipeline:
             "num_documents": len(uploaded_files)
         }
         
-    def ingest_directory(self, dir_path):
-        """Ingest all supported documents from a directory."""
-        chunks = self.doc_loader.load_directory(dir_path)
-        if not chunks:
-            return 0
+    def ingest_directory(self, dir_path, batch_size=10):
+        """Ingest all supported documents from a directory.
+        
+        Uses batch processing for large collections to keep memory usage low.
+        
+        Args:
+            dir_path: Path to directory containing documents.
+            batch_size: Number of files per batch (default: 10).
             
-        if self.vectorstore is None:
-            self.vectorstore = self.vs_manager.create_from_documents(chunks)
-        else:
-            self.vectorstore = self.vs_manager.add_documents(self.vectorstore, chunks)
+        Returns:
+            Total number of chunks ingested.
+        """
+        total_chunks = 0
+        
+        for batch in self.doc_loader.load_directory_batched(dir_path, batch_size=batch_size):
+            chunks = batch["chunks"]
+            if not chunks:
+                continue
+                
+            if self.vectorstore is None:
+                logger.info(f"Creating new vector store from batch {batch['batch_number']}")
+                self.vectorstore = self.vs_manager.create_from_documents(chunks)
+            else:
+                logger.info(f"Adding batch {batch['batch_number']} to existing vector store")
+                self.vectorstore = self.vs_manager.add_documents(self.vectorstore, chunks)
             
-        self.vs_manager.save(self.vectorstore, VECTORSTORE_DIR)
-        return len(chunks)
+            total_chunks += len(chunks)
+        
+        if total_chunks > 0:
+            self.vs_manager.save(self.vectorstore, VECTORSTORE_DIR)
+            logger.info(f"Directory ingestion complete: {total_chunks} total chunks indexed")
+        
+        return total_chunks
 
     def search(self, query, k=5):
-        """Search the vector store and return formatted results."""
+        """Search the vector store and return formatted results.
+        
+        Handles edge cases like empty queries, special characters,
+        and missing index gracefully.
+        """
+        # Edge case: empty or whitespace-only query
+        if not query or not query.strip():
+            logger.warning("Empty search query received")
+            return []
+        
+        # Edge case: no index loaded
         if self.vectorstore is None:
             logger.warning(f"Search attempted for query '{query}' but no index is loaded")
             return []
 
-        logger.info(f"Executing search for query: '{query}' (top_k={k})")
-        raw_results = self.vs_manager.search(self.vectorstore, query, k=k)
+        # Sanitize query: remove special regex characters that could cause issues
+        clean_query = re.sub(r'[^\w\s\-\'\"\?\.,]', ' ', query.strip())
+        clean_query = re.sub(r'\s+', ' ', clean_query).strip()
+        
+        if not clean_query:
+            logger.warning(f"Query '{query}' reduced to empty after sanitization")
+            return []
+
+        logger.info(f"Executing search for query: '{clean_query}' (top_k={k})")
+        
+        try:
+            raw_results = self.vs_manager.search(self.vectorstore, clean_query, k=k)
+        except Exception as e:
+            logger.error(f"FAISS search failed for query '{clean_query}': {e}")
+            return []
         
         formatted_results = []
         for doc, score in raw_results:
